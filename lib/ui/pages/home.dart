@@ -28,7 +28,7 @@ class _HomePageState extends State<HomePage> {
     );
   }
 
-  void _redirectCategoryList(String category) async {
+  void _redirectCategoryList(BuildContext context, String category) async {
     var results = await ItemJsonStorage().readAllByCategory();
     List<Item> items = results[category];
     Navigator.push(
@@ -53,7 +53,7 @@ class _HomePageState extends State<HomePage> {
     });
   }
 
-  List<Widget> buildItemStats() {
+  List<Widget> buildItemStats(BuildContext context) {
     List<Widget> allItemStats = [];
     this._itemsByCategory.forEach((String category, List<Item> items) {
       Map<String, List<Item>> itemsByCategoryByUnit =
@@ -65,7 +65,7 @@ class _HomePageState extends State<HomePage> {
           averagePricePer: ItemJsonStorage.meanItemPrices(itemsByUnit),
           uom: uom,
           onTap: () async {
-            await _redirectCategoryList(category);
+            await _redirectCategoryList(context, category);
           },
         ));
       });
@@ -83,7 +83,7 @@ class _HomePageState extends State<HomePage> {
       body: Container(
         child: ListView(
           shrinkWrap: true,
-          children: buildItemStats(),
+          children: buildItemStats(context),
         ),
       ),
       floatingActionButton: FloatingActionButton(

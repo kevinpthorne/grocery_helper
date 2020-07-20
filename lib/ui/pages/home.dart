@@ -28,6 +28,20 @@ class _HomePageState extends State<HomePage> {
     );
   }
 
+  void _redirectCategoryList(String category) async {
+    var results = await ItemJsonStorage().readAllByCategory();
+    List<Item> items = results[category];
+    Navigator.push(
+      context,
+      new MaterialPageRoute(
+        builder: (BuildContext context) => new ItemsPage(
+          items: items,
+          category: category,
+        ),
+      ),
+    );
+  }
+
   @override
   void initState() {
     super.initState();
@@ -51,17 +65,7 @@ class _HomePageState extends State<HomePage> {
           averagePricePer: ItemJsonStorage.meanItemPrices(itemsByUnit),
           uom: uom,
           onTap: () async {
-            var results = await ItemJsonStorage().readAllByCategory();
-            List<Item> items = results[category];
-            Navigator.push(
-              context,
-              new MaterialPageRoute(
-                builder: (BuildContext context) => new ItemsPage(
-                  items: items,
-                  category: category,
-                ),
-              ),
-            );
+            await _redirectCategoryList(category);
           },
         ));
       });
